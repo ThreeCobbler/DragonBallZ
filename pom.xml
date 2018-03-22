@@ -38,6 +38,8 @@
 		<commons.version>RELEASE</commons.version>
 		<spring-boot.version>RELEASE</spring-boot.version>
 		<tk.mybatis.boot.version>1.2.4</tk.mybatis.boot.version>
+
+		<mysql.version>5.1.24</mysql.version>
 	</properties>
 
 	<dependencyManagement>
@@ -72,6 +74,12 @@
 				<groupId>com.github.pagehelper</groupId>
 				<artifactId>pagehelper-spring-boot-starter</artifactId>
 				<version>${spring-boot.version}</version>
+			</dependency>
+			<!-- 数据库驱动 -->
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -118,6 +126,11 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>${commons.version}</version>
+		</dependency>
+		<!-- 数据库驱动 -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
 
 	</dependencies>
