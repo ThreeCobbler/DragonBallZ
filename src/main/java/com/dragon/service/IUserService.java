@@ -7,6 +7,12 @@ import com.dragon.dao.entity.UserEO;
  */
 public interface IUserService {
 
-    void add(UserEO user);
+    UserEO add(UserEO user);
+
+    UserEO findById(Long id);
+
+    UserEO updateUser(UserEO user);
+
+    void deleteById(Long id);
 
 }
