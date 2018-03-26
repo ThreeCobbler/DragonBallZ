@@ -1,4 +1,4 @@
-package com.dragon.Cache;
+package com.dragon.cache;
 
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
