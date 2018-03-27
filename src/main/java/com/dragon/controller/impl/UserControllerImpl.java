@@ -1,5 +1,6 @@
 package com.dragon.controller.impl;
 
+import com.dragon.common.dto.BaseResponse;
 import com.dragon.controller.IUserController;
 import com.dragon.dao.entity.UserEO;
 import com.dragon.service.IUserService;
@@ -17,23 +18,69 @@ public class UserControllerImpl implements IUserController {
     private IUserService userService;
 
     @RequestMapping(value = "add",method = RequestMethod.POST)
-    public void add(@RequestBody UserEO user){
-        userService.add(user);
+    public BaseResponse add(@RequestBody UserEO user){
+        BaseResponse response = new BaseResponse();
+        try{
+            userService.add(user);
+        }catch (RuntimeException e){
+            response.setErrorMessage(e.getMessage());
+        }catch (Exception e){
+            response.setErrorMessage(e.getMessage());
+        }
+        return response;
     }
 
     @RequestMapping(value = "findById",method = RequestMethod.GET)
-    public UserEO findById(@RequestParam Long id){
-        return userService.findById(id);
+    public BaseResponse findById(@RequestParam Long id){
+        BaseResponse response = new BaseResponse();
+        try{
+            UserEO user = userService.findById(id);
+            response.setResult(user);
+        }catch (RuntimeException e){
+            response.setErrorMessage(e.getMessage());
+        }catch (Exception e){
+            response.setErrorMessage(e.getMessage());
+        }
+        return response;
     }
 
     @RequestMapping(value = "updateUser",method = RequestMethod.POST)
-    public void updateUser(@RequestBody UserEO user){
-        userService.updateUser(user);
+    public BaseResponse updateUser(@RequestBody UserEO user){
+        BaseResponse response = new BaseResponse();
+        try{
+            userService.updateUser(user);
+        }catch (RuntimeException e){
+            response.setErrorMessage(e.getMessage());
+        }catch (Exception e){
+            response.setErrorMessage(e.getMessage());
+        }
+        return response;
     }
 
     @RequestMapping(value = "deleteById",method = RequestMethod.GET)
-    public void deleteById(@RequestParam Long id){
-        userService.deleteById(id);
+    public BaseResponse deleteById(@RequestParam Long id){
+        BaseResponse response = new BaseResponse();
+        try{
+            userService.deleteById(id);
+        }catch (RuntimeException e){
+            response.setErrorMessage(e.getMessage());
+        }catch (Exception e){
+            response.setErrorMessage(e.getMessage());
+        }
+        return response;
+    }
+
+    @RequestMapping(value = "checkUser",method = RequestMethod.GET)
+    public BaseResponse checkUser(@RequestParam String userAccount,@RequestParam String userName){
+        BaseResponse response = new BaseResponse();
+        try{
+            userService.checkUser(userAccount,userName);
+        }catch (RuntimeException e) {
+            response.setErrorMessage(e.getMessage());
+        }catch (Exception e){
+            response.setErrorMessage(e.getMessage());
+        }
+        return response;
     }
 
 

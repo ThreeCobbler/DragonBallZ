@@ -15,4 +15,6 @@ public interface IUserService {
 
     void deleteById(Long id);
 
+    boolean checkUser(String userAccount, String userName);
+
 }

@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by 339939 on 2018/3/23.
  */
-public class BaseResponse<T> {
+public class BaseResponse<T> extends AbstractServiceResponse{
 
     private T result;
     private List<T> data;

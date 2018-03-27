@@ -1,5 +1,6 @@
 package com.dragon.service.impl;
 
+import com.dragon.common.utils.Md5;
 import com.dragon.dao.entity.UserEO;
 import com.dragon.dao.mapper.UserEOMapper;
 import com.dragon.service.IUserService;
@@ -9,6 +10,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
 
@@ -34,6 +36,7 @@ public class UserServiceImpl implements IUserService {
     public UserEO add(UserEO user) {
         user.setCreateTime(new Date());
         user.setLastUpdateTime(new Date());
+        user.setUserPassword(Md5.encode(user.getUserPassword()));
         userEOMapper.insert(user);
         return user;
     }
@@ -64,5 +67,18 @@ public class UserServiceImpl implements IUserService {
         UserEO userEO = new UserEO();
         userEO.setId(id);
         userEOMapper.deleteByPrimaryKey(userEO);
+    }
+
+    @Override
+    public boolean checkUser(String userAccount, String userName) {
+        Example example = new Example(UserEO.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("userAccount",userAccount);
+        criteria.andEqualTo("userName",userName);
+        int count = userEOMapper.selectCountByExample(example);
+        if (count > 0) {
+            throw new RuntimeException("该账户已经注册");
+        }
+        return true;
     }
 }
