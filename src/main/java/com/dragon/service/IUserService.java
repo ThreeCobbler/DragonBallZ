@@ -22,4 +22,6 @@ public interface IUserService {
 
     List<UserEO> getUserList(int page,int size,String startTime,String endTime) throws ParseException;
 
+    String login(String userAccount,String userPassword);
+
 }

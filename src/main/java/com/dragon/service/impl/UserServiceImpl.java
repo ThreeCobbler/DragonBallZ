@@ -3,6 +3,7 @@ package com.dragon.service.impl;
 import com.dragon.common.utils.DateUtil;
 import com.dragon.dao.entity.UserEO;
 import com.dragon.dao.mapper.UserEOMapper;
+import com.dragon.service.IUserRedis;
 import com.dragon.service.IUserService;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -12,6 +13,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
 import tk.mybatis.mapper.entity.Example;
 
@@ -19,6 +21,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by 339939 on 2018/3/22.
@@ -40,6 +43,9 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     private UserEOMapper userEOMapper;
+
+    @Autowired
+    private IUserRedis userRedis;
 
     @CacheEvict(value=USER_CACHE_NAME,key=CACHE_KEY)
     @Override
@@ -94,7 +100,7 @@ public class UserServiceImpl implements IUserService {
         }
         int count = userEOMapper.selectCountByExample(example);
         if (count > 0) {
-            throw new RuntimeException("该账户已经注册");
+            throw new RuntimeException("该账户或用户名已经注册");
         }
         return true;
     }
@@ -113,5 +119,24 @@ public class UserServiceImpl implements IUserService {
         }
         List<UserEO> userList = userEOMapper.selectByExample(example);
         return userList;
+    }
+
+    @Override
+    public String login(String userAccount, String userPassword) {
+        Example example = new Example(UserEO.class);
+        Example.Criteria criteria = example.createCriteria().andEqualTo("userAccount", userAccount);
+        List<UserEO> list = userEOMapper.selectByExample(example);
+        if (CollectionUtils.isEmpty(list)) {
+            throw new RuntimeException("用户名或密码不正确");
+        }
+        UserEO userEO = list.get(0);
+        String str = DigestUtils.md5DigestAsHex((userPassword + SALT).getBytes());
+        if (!str.equals(userEO.getUserPassword())) {
+            throw new RuntimeException("用户名或密码不正确");
+        }
+        String token =  UUID.randomUUID().toString();
+        userEO.setUserPassword(null);
+        userRedis.addToken(token,userEO);
+        return token;
     }
 }

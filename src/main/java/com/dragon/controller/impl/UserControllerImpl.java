@@ -1,14 +1,19 @@
 package com.dragon.controller.impl;
 
 import com.dragon.common.dto.BaseResponse;
+import com.dragon.common.utils.CookieUtils;
 import com.dragon.controller.IUserController;
 import com.dragon.dao.entity.UserEO;
+import com.dragon.service.IUserRedis;
 import com.dragon.service.IUserService;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -20,6 +25,12 @@ public class UserControllerImpl implements IUserController {
 
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private IUserRedis userRedis;
+
+    @Value(value="${TOKEN_KEY}")
+    private String TOKEN_KEY;
 
     /**
      * 注册
@@ -136,6 +147,47 @@ public class UserControllerImpl implements IUserController {
             response.setPageSize(size);
             response.setTotalCount(pages.getTotal());
         }catch (RuntimeException e) {
+            response.setErrorMessage(e.getMessage());
+        }catch (Exception e){
+            response.setErrorMessage(e.getMessage());
+        }
+        return response;
+    }
+
+    /**
+     * 登陆
+     * @param userAccount
+     * @param userPassword
+     * @return
+     */
+    @RequestMapping(value = "login",method = RequestMethod.GET)
+    public BaseResponse login(@RequestParam String userAccount, @RequestParam String userPassword,
+                              HttpServletRequest request,HttpServletResponse httpResponse) {
+        BaseResponse response = new BaseResponse();
+        try{
+            String uid = userService.login(userAccount, userPassword);
+            CookieUtils.setCookie(request,httpResponse,TOKEN_KEY,uid);
+            response.setMessage("登陆成功");
+            response.setResult(uid);
+        }catch (RuntimeException e){
+            response.setErrorMessage(e.getMessage());
+        }catch (Exception e){
+            response.setErrorMessage(e.getMessage());
+        }
+        return response;
+    }
+
+    @RequestMapping(value="getUserByToken",method = RequestMethod.GET)
+    public BaseResponse getUserByToken(@RequestParam String token) {
+        BaseResponse response = new BaseResponse();
+        try{
+            UserEO userEO = userRedis.getUserEO(token);
+            if (userEO == null) {
+                throw new RuntimeException("请重新登陆");
+            }
+            userRedis.addToken(token,userEO);
+            response.setResult(userEO);
+        }catch (RuntimeException e){
             response.setErrorMessage(e.getMessage());
         }catch (Exception e){
             response.setErrorMessage(e.getMessage());
