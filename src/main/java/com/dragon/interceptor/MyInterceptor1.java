@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * Created by 339939 on 2018/3/26.
@@ -24,10 +25,17 @@ public class MyInterceptor1 implements HandlerInterceptor {
     @Autowired
     private IUserRedis userRedis;
 
+    private List<String> ignoreList;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         System.out.println(">>>MyInterceptor1>>>>>>>在请求处理之前进行调用（Controller方法调用之前）");
         String requestURI = request.getRequestURI();
+        for (String url : ignoreList ) {
+            if(url.equals(requestURI)) {
+                return true;
+            }
+        }
         String cookieValue = CookieUtils.getCookieValue(request, TOKEN_KEY);
         if (StringUtils.isBlank(cookieValue)) {
 //            response.sendRedirect("登录地址?url="+request.getRequestURL());
@@ -44,6 +52,7 @@ public class MyInterceptor1 implements HandlerInterceptor {
             return false;
         }
         // 只有返回true才会继续向下执行，返回false取消当前请求
+        request.setAttribute("user",userEO);
         return true;
     }
 
@@ -55,5 +64,13 @@ public class MyInterceptor1 implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) throws Exception {
         System.out.println(">>>MyInterceptor1>>>>>>>在整个请求结束之后被调用，也就是在DispatcherServlet 渲染了对应的视图之后执行（主要是用于进行资源清理工作）");
+    }
+
+    public List<String> getIgnoreList() {
+        return ignoreList;
+    }
+
+    public void setIgnoreList(List<String> ignoreList) {
+        this.ignoreList = ignoreList;
     }
 }
