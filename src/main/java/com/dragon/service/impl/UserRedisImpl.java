@@ -29,7 +29,7 @@ public class UserRedisImpl extends AbstractRedis implements IUserRedis {
 
     @Override
     public void addToken(String uuid, UserEO userEO) {
-        valueOps.set(prefix+uuid, JSON.toJSONString(userEO),18000, TimeUnit.SECONDS);
+        valueOps.set(prefix + uuid, JSON.toJSONString(userEO),18000, TimeUnit.SECONDS);
     }
 
     @Override

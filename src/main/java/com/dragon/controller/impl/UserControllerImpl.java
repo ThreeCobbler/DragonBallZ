@@ -160,7 +160,7 @@ public class UserControllerImpl implements IUserController {
      * @param userPassword
      * @return
      */
-    @RequestMapping(value = "login",method = RequestMethod.GET)
+    @RequestMapping(value = "login",method = RequestMethod.GET,produces="application/json;charset=UTF-8")
     public BaseResponse login(@RequestParam String userAccount, @RequestParam String userPassword,
                               HttpServletRequest request,HttpServletResponse httpResponse) {
         BaseResponse response = new BaseResponse();
@@ -177,6 +177,11 @@ public class UserControllerImpl implements IUserController {
         return response;
     }
 
+    /**
+     * 根据token获取用户信息
+     * @param token
+     * @return
+     */
     @RequestMapping(value="getUserByToken",method = RequestMethod.GET)
     public BaseResponse getUserByToken(@RequestParam String token) {
         BaseResponse response = new BaseResponse();
@@ -190,6 +195,23 @@ public class UserControllerImpl implements IUserController {
         }catch (RuntimeException e){
             response.setErrorMessage(e.getMessage());
         }catch (Exception e){
+            response.setErrorMessage(e.getMessage());
+        }
+        return response;
+    }
+
+    /**
+     * 退出
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="logout",method = RequestMethod.GET)
+    public BaseResponse logout(HttpServletRequest request) {
+        BaseResponse response = new BaseResponse();
+        try{
+            String token = CookieUtils.getCookieValue(request, TOKEN_KEY);
+            userRedis.delete(token);
+        }catch (Exception e) {
             response.setErrorMessage(e.getMessage());
         }
         return response;
