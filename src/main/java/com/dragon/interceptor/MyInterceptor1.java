@@ -32,12 +32,15 @@ public class MyInterceptor1 implements HandlerInterceptor {
         if (StringUtils.isBlank(cookieValue)) {
 //            response.sendRedirect("登录地址?url="+request.getRequestURL());
             //将当前url传到登录页面，登录成功后跳转回来
-//            throw new RuntimeException("请重新登");
+            response.setHeader("Content-type","text/html; charset=UTF-8");
+            response.getOutputStream().write("请重新登陆".getBytes());
             return false;
         }
         UserEO userEO = userRedis.getUserEO(cookieValue);
         if (userEO == null) {
 //            response.sendRedirect("登录地址?url="+request.getRequestURL());
+            response.setHeader("Content-type","text/html; charset=UTF-8");
+            response.getOutputStream().write("请重新登陆".getBytes());
             return false;
         }
         // 只有返回true才会继续向下执行，返回false取消当前请求
