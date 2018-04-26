@@ -1,9 +1,10 @@
 package com.dragon.interceptor;
 
+import com.alibaba.fastjson.JSON;
+import com.dragon.common.dto.BaseResponse;
 import com.dragon.common.utils.CookieUtils;
 import com.dragon.dao.entity.UserEO;
 import com.dragon.service.IUserRedis;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
@@ -37,18 +38,15 @@ public class MyInterceptor1 implements HandlerInterceptor {
             }
         }
         String cookieValue = CookieUtils.getCookieValue(request, TOKEN_KEY);
-        if (StringUtils.isBlank(cookieValue)) {
-//            response.sendRedirect("登录地址?url="+request.getRequestURL());
-            //将当前url传到登录页面，登录成功后跳转回来
-            response.setHeader("Content-type","text/html; charset=UTF-8");
-            response.getOutputStream().write("请重新登陆".getBytes());
-            return false;
-        }
         UserEO userEO = userRedis.getUserEO(cookieValue);
         if (userEO == null) {
 //            response.sendRedirect("登录地址?url="+request.getRequestURL());
+            BaseResponse baseResponse = new BaseResponse();
+            baseResponse.setErrorMessage("请重新登陆");
             response.setHeader("Content-type","text/html; charset=UTF-8");
-            response.getOutputStream().write("请重新登陆".getBytes());
+            response.getOutputStream().write(JSON.toJSONString(baseResponse).getBytes());
+            response.getOutputStream().flush();
+            response.getOutputStream().close();
             return false;
         }
         // 只有返回true才会继续向下执行，返回false取消当前请求
