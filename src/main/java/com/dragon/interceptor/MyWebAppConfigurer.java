@@ -35,7 +35,9 @@ public class MyWebAppConfigurer extends WebMvcConfigurerAdapter {
 
     private void addIgnoreList() {
         List<String> list = Arrays.asList(
-                "/user/add"
+                "/user/add",
+                "/user/login",
+                "/user/checkUser"
         );
         this.myInterceptor1().setIgnoreList(list);
     }

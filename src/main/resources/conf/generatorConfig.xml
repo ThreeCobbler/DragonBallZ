@@ -31,11 +31,15 @@
         <!-- 生成service的包名和位置 -->
         <javaClientGenerator targetPackage="${targetMapperPackage}" targetProject="${targetJavaProject}" type="XMLMAPPER" />
         <!-- 要生成的那些表 -->
-        <table tableName="demo" domainObjectName="Demo" >
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
+        <!--<table tableName="demo" domainObjectName="Demo" >-->
+            <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+        <!--</table>-->
 
-        <table tableName="t_user" domainObjectName="UserEO" >
+        <!--<table tableName="t_user" domainObjectName="UserEO" >-->
+            <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+        <!--</table>-->
+
+        <table tableName="t_order" domainObjectName="OrderEO" >
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
 

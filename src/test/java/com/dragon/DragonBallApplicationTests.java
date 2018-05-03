@@ -1,6 +1,7 @@
 package com.dragon;
 
 import com.dragon.dao.entity.UserEO;
+import com.dragon.service.IOrderRedis;
 import com.dragon.service.IUserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +16,9 @@ public class DragonBallApplicationTests {
 	@Autowired
 	private IUserService userService;
 
+	@Autowired
+	private IOrderRedis orderRedis;
+
 	@Test
 	public void contextLoads() {
 	}
@@ -24,6 +28,13 @@ public class DragonBallApplicationTests {
 		UserEO user = userService.findById(7l);
 		user.setUserPassword("888888");
 		userService.updateUser(user);
+	}
+
+
+	@Test
+	public void test3(){
+		String orderNo = orderRedis.getOrderNo();
+		System.out.println(orderNo);
 	}
 
 }
