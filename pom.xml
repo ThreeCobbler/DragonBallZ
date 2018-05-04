@@ -196,6 +196,12 @@
 			<version>1.4.5.RELEASE</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.alipay</groupId>
+			<artifactId>sdk-java</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+
 	</dependencies>
 
 
