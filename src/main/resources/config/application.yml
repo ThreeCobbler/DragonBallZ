@@ -16,3 +16,16 @@ AlipayConfig.CHARSET: utf-8
 
 APP_ID: 2016091300500821
 
+buyer:
+   user_account: jcjtsr2271@sandbox.com
+   login_password: 111111
+   pay_password: 111111
+   user_name: 沙箱环境
+   IDENTITY_CARD: 27249619900520633X
+
+business:
+    account: wkuyqi4216@sandbox.com
+    UID: 2088102175426103
+    login_password: 111111
+
+

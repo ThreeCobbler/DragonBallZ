@@ -4,7 +4,9 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayTradePagePayRequest;
+import com.dragon.dao.entity.OrderEO;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,16 +41,16 @@ public class AliPay {
     private String APP_ID;
 
     @RequestMapping("pay")
-    public void doPost(HttpServletRequest httpRequest,
+    public void doPost(@RequestBody OrderEO order, HttpServletRequest httpRequest,
                        HttpServletResponse httpResponse) throws ServletException, IOException {
         AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipaydev.com/gateway.do",APP_ID, APP_PRIVATE_KEY , FORMAT, CHARSET, ALIPAY_PUBLIC_KEY, SIGN_TYPE); //获得初始化的AlipayClient
         AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();//创建API对应的request
         alipayRequest.setReturnUrl("http://domain.com/CallBack/return_url.jsp");
         alipayRequest.setNotifyUrl("http://domain.com/CallBack/notify_url.jsp");//在公共参数中设置回跳和通知地址
         alipayRequest.setBizContent("{" +
-                "    \"out_trade_no\":\"20180320010101001\"," +
+                "    \"out_trade_no\":\""+order.getOrderNo()+"\"," +
                 "    \"product_code\":\"FAST_INSTANT_TRADE_PAY\"," +
-                "    \"total_amount\":88.88," +
+                "    \"total_amount\":"+order.getOrderAmount()+"," +
                 "    \"subject\":\"Iphone6 16G\"," +
                 "    \"body\":\"Iphone6 16G\"," +
                 "    \"passback_params\":\"merchantBizType%3d3C%26merchantBizNo%3d2016010101111\"," +
