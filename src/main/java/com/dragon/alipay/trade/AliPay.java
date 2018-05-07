@@ -10,6 +10,7 @@ import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
 import com.alipay.api.response.AlipayTradeRefundResponse;
+import com.dragon.common.enums.OrderStatus;
 import com.dragon.dao.entity.OrderEO;
 import com.dragon.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -148,9 +149,31 @@ public class AliPay {
         orderService.update(orderEO);
     }
 
+    /**
+     * 支付异步回调
+     * @param notify_time
+     * @param notify_type
+     * @param notify_id
+     * @param charset
+     * @param version
+     * @param sign
+     * @param auth_app_id
+     * @param trade_no
+     * @param app_id
+     * @param out_trade_no
+     * @param out_biz_no
+     * @param trade_status
+     */
     @RequestMapping("pay/notify")
-    public void payNotify(Date notify_time,String notify_type,String notify_id,String charset ) {
-
+    public void payNotify(@RequestParam Date notify_time,@RequestParam String notify_type,@RequestParam String notify_id,@RequestParam String charset,
+                          @RequestParam String version,@RequestParam String sign,@RequestParam String auth_app_id, @RequestParam String trade_no,
+                          @RequestParam String app_id,@RequestParam String out_trade_no,@RequestParam String out_biz_no,@RequestParam String trade_status) {
+        OrderEO orderEO = orderService.selectByOrderNo(out_trade_no);
+        orderEO.setTradeNo(trade_no);
+        //支付接口以异步回调接口为主
+        orderEO.setStatus(OrderStatus.AlreadyPay.getCode());
+        orderEO.setLastUpdateTime(notify_time);
+        orderService.update(orderEO);
     }
 
     /**
