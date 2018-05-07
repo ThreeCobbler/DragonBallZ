@@ -1,7 +1,8 @@
 package com.dragon.controller;
 
 /**
- * Created by 339939 on 2018/3/22.
+ * @author 339939
+ * @date  2018/3/22.
  */
 public interface IUserController {
 }

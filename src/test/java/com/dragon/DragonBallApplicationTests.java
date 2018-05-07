@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static com.sun.xml.internal.fastinfoset.util.ValueArray.MAXIMUM_CAPACITY;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class DragonBallApplicationTests {
@@ -35,6 +37,29 @@ public class DragonBallApplicationTests {
 	public void test3(){
 		String orderNo = orderRedis.getOrderNo();
 		System.out.println(orderNo);
+	}
+
+	@Test
+	public void test2(){
+		int n = 8 - 1;
+		n |= n >>> 1;
+		n |= n >>> 2;
+		n |= n >>> 4;
+		n |= n >>> 8;
+		n |= n >>> 16;
+		int a = (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
+		System.out.println(a);
+	}
+
+	public static void main(String[] args) {
+		int n = 8 - 1;
+		n |= n >>> 1;
+		n |= n >>> 2;
+		n |= n >>> 4;
+		n |= n >>> 8;
+		n |= n >>> 16;
+		int a = (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
+		System.out.println(a);
 	}
 
 }
