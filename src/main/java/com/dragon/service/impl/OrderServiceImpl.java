@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 /**
- * Created by 339939 on 2018/5/3.
+ * @author  339939 on 2018/5/3.
  */
 @Service
 public class OrderServiceImpl implements IOrderService{
@@ -33,5 +33,26 @@ public class OrderServiceImpl implements IOrderService{
         order.setOrderAmount(orderAmount);
         orderEOMapper.insert(order);
         return order;
+    }
+
+    /**
+     * 根据订单号查询订单
+     * @param orderNo
+     * @return
+     */
+    @Override
+    public OrderEO selectByOrderNo(String orderNo) {
+        OrderEO order = new OrderEO();
+        order.setOrderNo(orderNo);
+        return orderEOMapper.selectOne(order);
+    }
+
+    /**
+     * 修改
+     * @param orderEO
+     */
+    @Override
+    public void update(OrderEO orderEO) {
+        orderEOMapper.updateByPrimaryKey(orderEO);
     }
 }

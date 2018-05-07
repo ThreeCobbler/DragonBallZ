@@ -162,7 +162,7 @@ public class DateUtil {
         }
     }
 
-    public static Date StringToDate(String dateString) {
+    public static Date stringToDate(String dateString) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date date = null;
 

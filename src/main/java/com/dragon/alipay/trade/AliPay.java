@@ -11,20 +11,22 @@ import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
 import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.dragon.dao.entity.OrderEO;
+import com.dragon.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 
 /**
- * Created by 339939 on 2018/5/3.
+ * @author 339939 on 2018/5/3.
  */
 @RestController
 @RequestMapping("alipay")
@@ -60,6 +62,17 @@ public class AliPay {
     @Autowired
     private AlipayTradeRefundRequest alipayTradeRefundRequest;
 
+    @Autowired
+    private IOrderService orderService;
+
+    /**
+     * 付款
+     * @param order
+     * @param httpRequest
+     * @param httpResponse
+     * @throws ServletException
+     * @throws IOException
+     */
     @RequestMapping("pay")
     public void doPost(@RequestBody OrderEO order, HttpServletRequest httpRequest,
                        HttpServletResponse httpResponse) throws ServletException, IOException {
@@ -100,9 +113,7 @@ public class AliPay {
      * 电脑网站支付
      */
     @RequestMapping("/pay/pc")
-    @ResponseBody
     public Object pc(@RequestBody OrderEO order) throws Exception {
-//        AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipaydev.com/gateway.do",APP_ID, APP_PRIVATE_KEY , FORMAT, CHARSET, ALIPAY_PUBLIC_KEY, SIGN_TYPE); //获得初始化的AlipayClient
         JSONObject bizContent = new JSONObject();
         bizContent.put("out_trade_no", order.getOrderNo());
         bizContent.put("total_amount", order.getOrderAmount());
@@ -113,12 +124,46 @@ public class AliPay {
     }
 
     /**
+     * 付款同步回调
+     * @param app_id
+     * @param method
+     * @param sign_type
+     * @param sign
+     * @param charset
+     * @param timestamp
+     * @param version
+     * @param auth_app_id
+     * @param out_trade_no
+     * @param trade_no
+     * @param total_amount
+     * @param seller_id
+     */
+    @RequestMapping("/pay/return")
+    public void payReturn(@RequestParam String app_id, @RequestParam String method, @RequestParam String sign_type,
+                          @RequestParam String sign, @RequestParam String charset , @RequestParam String timestamp,
+                          @RequestParam String version, @RequestParam String auth_app_id, @RequestParam String out_trade_no,
+                          @RequestParam String trade_no, @RequestParam Double total_amount,@RequestParam String seller_id){
+        OrderEO orderEO = orderService.selectByOrderNo(out_trade_no);
+        orderEO.setTradeNo(trade_no);
+        orderService.update(orderEO);
+    }
+
+    @RequestMapping("pay/notify")
+    public void payNotify(Date notify_time,String notify_type,String notify_id,String charset ) {
+
+    }
+
+    /**
      * 退款
-     * @param orderEO
+     * @param orderNo
      * @throws AlipayApiException
      */
     @RequestMapping("refund")
-    public AlipayTradeRefundResponse refund(@RequestBody OrderEO orderEO) throws AlipayApiException {
+    public AlipayTradeRefundResponse refund(@RequestParam String orderNo) throws AlipayApiException {
+        OrderEO orderEO = orderService.selectByOrderNo(orderNo);
+        if (orderEO == null) {
+            throw new RuntimeException("订单不存在");
+        }
         JSONObject bizContent = new JSONObject();
         bizContent.put("out_trade_no", orderEO.getOrderNo());
         bizContent.put("refund_amount", orderEO.getOrderAmount());
@@ -134,26 +179,33 @@ public class AliPay {
         return response;
     }
 
+    /**
+     * 退款查询
+     * @param orderNo
+     * @throws AlipayApiException
+     */
     @RequestMapping("refund/query")
-    public void refundQuery(@RequestBody OrderEO order) throws AlipayApiException {
+    public AlipayTradeFastpayRefundQueryResponse refundQuery(@RequestParam String orderNo) throws AlipayApiException {
+        OrderEO orderEO = orderService.selectByOrderNo(orderNo);
+        if (orderEO == null) {
+            throw new RuntimeException("订单不存在");
+        }
         AlipayTradeFastpayRefundQueryRequest request = new AlipayTradeFastpayRefundQueryRequest();
         JSONObject bizContent = new JSONObject();
-        bizContent.put("out_trade_no", order.getOrderNo());
-        bizContent.put("trade_no", order.getOrderAmount());
-        bizContent.put("refund_currency", "CNY");
-        bizContent.put("refund_reason", "正常退款");
-        request.setBizContent("{" +
-                "\"trade_no\":\"20150320010101001\"," +
-                "\"out_trade_no\":\"2014112611001004680073956707\"," +
-                "\"out_request_no\":\"2014112611001004680073956707\"" +
-                "  }");
+        bizContent.put("out_trade_no", orderEO.getOrderNo());
+        bizContent.put("trade_no", orderEO.getTradeNo());
+        bizContent.put("out_request_no", orderEO.getOrderNo());
+        request.setBizContent(bizContent.toString());
         AlipayTradeFastpayRefundQueryResponse response = alipayClient.execute(request);
         if(response.isSuccess()){
             System.out.println("调用成功");
         } else {
             System.out.println("调用失败");
         }
+        return response;
     }
+
+
 
 
 

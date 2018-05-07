@@ -38,7 +38,7 @@ public class MyConfiguration {
     @Bean
     public AlipayTradePagePayRequest alipayTradePagePayRequest(){
         AlipayTradePagePayRequest alipayTradePagePayRequest = new AlipayTradePagePayRequest();
-        alipayTradePagePayRequest.setReturnUrl("http://domain.com/CallBack/return_url.jsp");
+        alipayTradePagePayRequest.setReturnUrl("http://localhost:8082/alipay/pay/return");
         alipayTradePagePayRequest.setNotifyUrl("http://domain.com/CallBack/notify_url.jsp");
         return alipayTradePagePayRequest;
     }

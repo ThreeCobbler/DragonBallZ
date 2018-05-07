@@ -42,6 +42,12 @@ public class OrderEO {
     private Date lastUpdateTime;
 
     /**
+     * 流水单号
+     */
+    @Column(name = "trade_no")
+    private String tradeNo;
+
+    /**
      * 获取主键
      *
      * @return id - 主键
@@ -147,5 +153,23 @@ public class OrderEO {
      */
     public void setLastUpdateTime(Date lastUpdateTime) {
         this.lastUpdateTime = lastUpdateTime;
+    }
+
+    /**
+     * 获取流水单号
+     *
+     * @return trade_no - 流水单号
+     */
+    public String getTradeNo() {
+        return tradeNo;
+    }
+
+    /**
+     * 设置流水单号
+     *
+     * @param tradeNo 流水单号
+     */
+    public void setTradeNo(String tradeNo) {
+        this.tradeNo = tradeNo;
     }
 }
