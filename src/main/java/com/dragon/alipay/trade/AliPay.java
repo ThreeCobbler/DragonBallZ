@@ -4,12 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
-import com.alipay.api.request.AlipayTradeFastpayRefundQueryRequest;
-import com.alipay.api.request.AlipayTradePagePayRequest;
-import com.alipay.api.request.AlipayTradeRefundRequest;
-import com.alipay.api.request.AlipayTradeWapPayRequest;
-import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
-import com.alipay.api.response.AlipayTradeRefundResponse;
+import com.alipay.api.internal.util.AlipaySignature;
+import com.alipay.api.request.*;
+import com.alipay.api.response.*;
+import com.dragon.common.dto.BaseResponse;
 import com.dragon.common.enums.OrderStatus;
 import com.dragon.dao.entity.OrderEO;
 import com.dragon.service.IOrderService;
@@ -24,7 +22,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * @author 339939 on 2018/5/3.
@@ -65,6 +66,10 @@ public class AliPay {
 
     @Autowired
     private IOrderService orderService;
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM--dd hh:mm:ss");
+
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * 付款
@@ -151,29 +156,24 @@ public class AliPay {
 
     /**
      * 支付异步回调
-     * @param notify_time
-     * @param notify_type
-     * @param notify_id
-     * @param charset
-     * @param version
-     * @param sign
-     * @param auth_app_id
-     * @param trade_no
-     * @param app_id
-     * @param out_trade_no
-     * @param out_biz_no
-     * @param trade_status
      */
     @RequestMapping("pay/notify")
-    public void payNotify(@RequestParam Date notify_time,@RequestParam String notify_type,@RequestParam String notify_id,@RequestParam String charset,
-                          @RequestParam String version,@RequestParam String sign,@RequestParam String auth_app_id, @RequestParam String trade_no,
-                          @RequestParam String app_id,@RequestParam String out_trade_no,@RequestParam String out_biz_no,@RequestParam String trade_status) {
-        OrderEO orderEO = orderService.selectByOrderNo(out_trade_no);
-        orderEO.setTradeNo(trade_no);
-        //支付接口以异步回调接口为主
-        orderEO.setStatus(OrderStatus.AlreadyPay.getCode());
-        orderEO.setLastUpdateTime(notify_time);
-        orderService.update(orderEO);
+    public BaseResponse payNotify(@RequestParam Map<String,String> map) throws ParseException, AlipayApiException {
+        BaseResponse response = new BaseResponse();
+        boolean result = AlipaySignature.rsaCheckV1(map, ALIPAY_PUBLIC_KEY, CHARSET, SIGN_TYPE);
+        if (result) {
+            OrderEO orderEO = orderService.selectByOrderNo(map.get("out_trade_no"));
+            orderEO.setTradeNo(map.get("trade_no"));
+            //支付接口以异步回调接口为主
+            orderEO.setStatus(OrderStatus.AlreadyPay.getCode());
+            orderEO.setLastUpdateTime(sdf.parse(map.get("notify_time")));
+            orderService.update(orderEO);
+            return response;
+        }else{
+            response.setErrorMessage("验证失败");
+            return response;
+        }
+
     }
 
     /**
@@ -228,8 +228,79 @@ public class AliPay {
         return response;
     }
 
+    /**
+     * 查询交易订单状态
+     * @param orderNo
+     * @return
+     * @throws AlipayApiException
+     */
+    @RequestMapping("trade/query")
+    public AlipayTradeQueryResponse tradeQuery(@RequestParam String orderNo) throws AlipayApiException {
+        OrderEO orderEO = orderService.selectByOrderNo(orderNo);
+        if (orderEO == null) {
+            throw new RuntimeException("订单不存在");
+        }
+        AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
+        JSONObject json = new JSONObject();
+        json.put("out_trade_no",orderEO.getOrderNo());
+        json.put("trade_no",orderEO.getTradeNo());
+        request.setBizContent(json.toString());
+        AlipayTradeQueryResponse response = alipayClient.execute(request);
+        if(response.isSuccess()){
+            System.out.println("调用成功");
+        } else {
+            System.out.println("调用失败");
+        }
+        return response;
+    }
 
+    /**
+     * 关闭交易
+     * 用于交易创建后，用户在一定时间内未进行支付，可调用该接口直接将未付款的交易进行关闭。
+     * @param orderNo
+     * @return
+     * @throws AlipayApiException
+     */
+    @RequestMapping("trade/close")
+    public AlipayTradeCloseResponse tradeClose(@RequestParam String orderNo) throws AlipayApiException {
+        OrderEO orderEO = orderService.selectByOrderNo(orderNo);
+        if (orderEO == null) {
+            throw new RuntimeException("订单不存在");
+        }
+        JSONObject json = new JSONObject();
+        json.put("out_trade_no",orderEO.getOrderNo());
+        json.put("operator_id","爱上层楼");
+        AlipayTradeCloseRequest request = new AlipayTradeCloseRequest();
+        request.setBizContent(json.toString());
+        AlipayTradeCloseResponse response = alipayClient.execute(request);
+        if(response.isSuccess()){
+            System.out.println("调用成功");
+        } else {
+            System.out.println("调用失败");
+        }
+        return response;
+    }
 
+    /**
+     * 查询对账单下载地址
+     * @return
+     * @throws AlipayApiException
+     */
+    @RequestMapping("download/url/query")
+    public AlipayDataDataserviceBillDownloadurlQueryResponse downloadUrlQuery() throws AlipayApiException {
+        AlipayDataDataserviceBillDownloadurlQueryRequest request = new AlipayDataDataserviceBillDownloadurlQueryRequest();
+        JSONObject json = new JSONObject();
+        json.put("bill_type","signcustomer");
+        json.put("bill_date",format.format(new Date()));
+        request.setBizContent(json.toString());
+        AlipayDataDataserviceBillDownloadurlQueryResponse response = alipayClient.execute(request);
+        if(response.isSuccess()){
+            System.out.println("调用成功");
+        } else {
+            System.out.println("调用失败");
+        }
+        return response;
+    }
 
 
 
