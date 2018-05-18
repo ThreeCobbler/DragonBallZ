@@ -24,7 +24,9 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by 339939 on 2018/3/22.
+ *
+ * @author 339939
+ * @date 2018/3/22
  */
 @Service
 public class UserServiceImpl implements IUserService {
@@ -33,7 +35,9 @@ public class UserServiceImpl implements IUserService {
 
     private final static String SALT = "大吉大利";
 
-    //这里的单引号不能少，否则会报错，被识别是一个对象;
+    /**
+     * 这里的单引号不能少，否则会报错，被识别是一个对象;
+     */
     public static final String CACHE_KEY = "'userInfo'";
 
     /**
@@ -71,7 +75,7 @@ public class UserServiceImpl implements IUserService {
 
     @CachePut(value = USER_CACHE_NAME,key = "'userInfo_'+#user.getId()")
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public UserEO updateUser(UserEO user) {
         UserEO userEO = userEOMapper.selectByPrimaryKey(user);
         userEO.setUserPassword(user.getUserPassword());

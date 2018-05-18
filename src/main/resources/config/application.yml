@@ -29,3 +29,14 @@ business:
     login_password: 111111
 
 
+constants:
+    # QQ
+    qqAppId: xxxxxxxx
+    qqAppSecret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    qqRedirectUrl: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    #WECAT
+    weCatAppId: wxe6029b044d561465
+    weCatAppSecret: ae8f292859a2676db0dd988281a12b10
+    weCatRedirectUrl: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+

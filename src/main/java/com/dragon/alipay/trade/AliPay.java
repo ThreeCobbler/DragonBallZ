@@ -53,9 +53,6 @@ public class AliPay {
     private String APP_ID;
 
     @Autowired
-    private AlipayTradeWapPayRequest alipayTradeWapPayRequest;
-
-    @Autowired
     private AlipayTradePagePayRequest alipayTradePagePayRequest;
 
     @Autowired

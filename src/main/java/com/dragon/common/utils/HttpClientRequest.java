@@ -36,7 +36,8 @@ public class HttpClientRequest extends BaseService{
             httpPost.setHeader("Accept", "application/json");
             //将参数转换成json格式
             String str = JSON.toJSONString(map);
-            StringEntity entity = new StringEntity(str, Charset.forName("utf-8"));// 解决中文乱码问题
+            // 解决中文乱码问题
+            StringEntity entity = new StringEntity(str, Charset.forName("utf-8"));
             entity.setContentEncoding("UTF-8");
             entity.setContentType("application/json");
             httpPost.setEntity(entity);
