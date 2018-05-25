@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -44,9 +45,10 @@ public class MyInterceptor1 implements HandlerInterceptor {
             BaseResponse baseResponse = new BaseResponse();
             baseResponse.setErrorMessage("请重新登陆");
             response.setHeader("Content-type","text/html; charset=UTF-8");
-            response.getOutputStream().write(JSON.toJSONString(baseResponse).getBytes());
-            response.getOutputStream().flush();
-            response.getOutputStream().close();
+            OutputStream out = response.getOutputStream();
+            out.write(JSON.toJSONString(baseResponse).getBytes("utf-8"));
+            out.flush();
+            out.close();
             return false;
         }
         // 只有返回true才会继续向下执行，返回false取消当前请求

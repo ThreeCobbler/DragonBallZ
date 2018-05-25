@@ -206,10 +206,11 @@ public class UserControllerImpl implements IUserController {
      * @return
      */
     @RequestMapping(value="logout",method = RequestMethod.GET)
-    public BaseResponse logout(HttpServletRequest request) {
+    public BaseResponse logout(HttpServletRequest request,HttpServletResponse httpServletResponse) {
         BaseResponse response = new BaseResponse();
         try{
             String token = CookieUtils.getCookieValue(request, TOKEN_KEY);
+            CookieUtils.deleteCookie(request,httpServletResponse,TOKEN_KEY);
             userRedis.delete(token);
         }catch (Exception e) {
             response.setErrorMessage(e.getMessage());

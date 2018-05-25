@@ -1,0 +1,92 @@
+主站接口文档:http://docs.5173.com/index.php?s=/16&page_id=200
+
+阿里云测试:
+	账号:jhzx_zxl@163.com
+	密码:JHlc5173
+
+项目文档svn地址:https://192.168.178.158/svn/PM/MKF_客服中心
+	xuwz     ,.M%!&3!!
+
+bugfreein:账号/密码:luojn@5173.com/123456
+http://bugfreein.5173.com/index.php
+
+idea激活码:http://idea.iteblog.com/key.php
+
+
+xftp:
+172.16.76.111   root   ,.M%!&3!!
+
+172.16.76.112   root   ,.M%!&3!!
+
+Liunx:
+:w 保存文件但不退出vi
+:w file 将修改另外保存到file中，不退出vi
+:w! 强制保存，不推出vi
+:wq 保存文件并退出vi
+:wq! 强制保存文件，并退出vi
+q: 不保存文件，退出vi
+:q! 不保存文件，强制退出vi
+:e! 放弃所有修改，从上次保存文件开始再编辑
+vi模式下，gg返回顶部，shift+g到底部。
+
+service iptables stop  关闭防火墙
+
+find / -name httpd.conf   查找文件所在的位置
+
+rm a.txt  删除普通文件a.txt
+rm -r a/  删除目录a
+rm -rf  a/  强制删除目录a
+-f  表示强制
+
+
+
+三、 本机连接虚拟机的redis
+1. 关闭虚拟机防火墙：
+1） 临时生效，重启后复原
+开启： serviceiptables start
+关闭： serviceiptables stop
+
+2）永久性生效，重启后不会复原
+开启： chkconfigiptables on
+关闭： chkconfigiptables off
+2. 本机和虚拟机ping通
+方法：在本机上ping +虚拟机ip，查看是否通。虚拟机ip通过ifconfig命令查看
+3. 修改redis的配置文件
+1） 将bind 127.0.0.1 注释掉
+2） 将protected-mode 设置为no
+4. 在本机上可以按照redis manager软件进行测试是否连接redis成功。
+其中输入项：host为虚拟机的ip
+port为redis端口，一般是6379
+
+
+SVN:https://JHBQ03ZJ0050.ad5173.com:8443/svn/MyRepo
+
+  https://JHBQ03ZJ0050.ad5173.com:8443/svn/taotao
+ljn/ljn
+
+开启Zookeeper
+/root/zookeeper-3.4.6/bin
+[root@localhost bin]# ./zkServer.sh start
+查看状态
+[root@localhost bin]# ./zkServer.sh status
+
+查看虚拟机端口是否联通:
+telnet 192.168.40.133 2181
+
+开启tomcat
+[root@localhost apache-tomcat-7.0.78]# bin/startup.sh
+ 查看日志
+[root@localhost apache-tomcat-7.0.78]# tail -f logs/catalina.out
+
+
+192.168.178.183
+mysql 3306 用户：qc  密码：qctest
+redis 6379 密码：redisforscm
+
+192.168.178.183 sqltest.5173.com  redis.5173.com
+
+测试服务器上记得配host
+
+虚拟机帐号：
+centOS7   root:root
+taotaoService   root:123456

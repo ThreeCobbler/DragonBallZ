@@ -3,10 +3,18 @@ package com.dragon.controller.impl;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sun.net.www.protocol.http.HttpURLConnection;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
 import java.util.zip.GZIPOutputStream;
 
 /**
@@ -15,9 +23,14 @@ import java.util.zip.GZIPOutputStream;
  */
 @RestController
 @RequestMapping("demo")
-public class ControllerDemo {
+public class ControllerDemo extends HttpServlet{
 
     private static int s = 0 ;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+    }
 
     /**
      * 压缩数据并返回
@@ -54,7 +67,7 @@ public class ControllerDemo {
     @RequestMapping("refresh")
     public void refresh(HttpServletRequest request, HttpServletResponse response) throws IOException {
         s++;
-        response.setHeader("refresh","3;http://localhost:8082/user/login?userAccount=Jim.saiyaren.com&userPassword=123456");
+        response.setHeader("refresh","3");
         String str = "天下风云出我辈，\n" + "</br>"+
                 "一入江湖岁月催。\n" + "</br>"+
                 "皇图霸业谈笑中，\n" + "</br>"+
@@ -76,4 +89,51 @@ public class ControllerDemo {
         response.setHeader("location","/1.html");
         response.setHeader("Content-type", "text/html;charset=UTF-8");
     }
+
+    @RequestMapping("image")
+    public void image(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setHeader("content-type","image/jpeg");
+        InputStream in = getServletContext().getResourceAsStream("/image/1.jpg");
+        int len = 0;
+        byte[] buffer = new byte[1024];
+        OutputStream out = response.getOutputStream();
+        while((len = in.read(buffer)) > 0) {
+            out.write(buffer,0,len);
+        }
+        out.close();
+
+//        //读取本地图片输入流
+//        FileInputStream inputStream = new FileInputStream("E:/gitRepository/myself/DragonBallZ/src/main/webapp/image/1.jpg");
+//        int i = inputStream.available();
+//        //byte数组用于存放图片字节数据
+//        byte[] buff = new byte[i];
+//        inputStream.read(buff);
+//        //记得关闭输入流
+//        inputStream.close();
+//        //设置发送到客户端的响应内容类型
+//        response.setContentType("image/*");
+//        OutputStream out = response.getOutputStream();
+//        out.write(buff);
+//        //关闭响应输出流
+//        out.close();
+    }
+
+    @RequestMapping("range")
+    public void range(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        URL url = new URL("http://localhost:8082/ziliao.txt");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestProperty("Range","bytes=5-");
+        InputStream in = conn.getInputStream();
+        int len = 0;
+        byte[] buffer = new byte[1024];
+        FileOutputStream out = new FileOutputStream("c:\\b.txt", true);
+        while((len = in.read(buffer)) > 0) {
+            out.write(buffer,0,len);
+        }
+        in.close();
+        out.close();
+
+
+    }
+
 }
