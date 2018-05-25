@@ -1,4 +1,4 @@
-package com.dragon.demo;
+package com.dragon.demo.annotation;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

@@ -1,4 +1,4 @@
-package com.dragon.demo;
+package com.dragon.demo.servlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

@@ -1,4 +1,4 @@
-package com.dragon.demo;
+package com.dragon.demo.annotation;
 
 /**
  * GoodsCodeType

@@ -1,8 +1,8 @@
 package com.dragon;
 
 import com.dragon.dao.entity.UserEO;
-import com.dragon.demo.AliYunField;
-import com.dragon.demo.GoodsEO;
+import com.dragon.demo.annotation.AliYunField;
+import com.dragon.demo.annotation.GoodsEO;
 import com.dragon.service.IOrderRedis;
 import com.dragon.service.IUserService;
 import org.junit.Test;
