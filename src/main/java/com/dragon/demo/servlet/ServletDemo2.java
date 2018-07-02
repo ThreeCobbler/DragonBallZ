@@ -1,5 +1,9 @@
 package com.dragon.demo.servlet;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,8 +17,16 @@ import java.io.OutputStream;
  * @author ljn
  * @date 2018/5/25.
  */
+@RestController
+@RequestMapping("servletDemo")
 public class ServletDemo2 extends HttpServlet {
 
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+    }
+
+    @RequestMapping("service")
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path = this.getServletContext().getRealPath("/image/2.jpg");
