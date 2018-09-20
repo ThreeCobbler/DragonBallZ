@@ -38,7 +38,8 @@ public class MyWebAppConfigurer extends WebMvcConfigurerAdapter {
                 "/user/add",
                 "/user/login",
                 "/user/checkUser",
-                "/ziliao.txt"
+                "/ziliao.txt",
+                "/demo/test2"
         );
         this.myInterceptor1().setIgnoreList(list);
     }
