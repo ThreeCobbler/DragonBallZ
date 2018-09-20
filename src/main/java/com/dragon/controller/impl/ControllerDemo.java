@@ -1,7 +1,9 @@
 package com.dragon.controller.impl;
 
+import com.dragon.common.dto.BaseResponse;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import sun.net.www.protocol.http.HttpURLConnection;
 
@@ -15,6 +17,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
 /**
@@ -24,6 +28,8 @@ import java.util.zip.GZIPOutputStream;
 @RestController
 @RequestMapping("demo")
 public class ControllerDemo extends HttpServlet{
+
+    private List<String> list;
 
     private static int s = 0 ;
 
@@ -132,8 +138,29 @@ public class ControllerDemo extends HttpServlet{
         }
         in.close();
         out.close();
+    }
 
+    @RequestMapping(value = "test2",method = RequestMethod.GET)
+    public BaseResponse createOrder(){
+        BaseResponse response = new BaseResponse();
+        try{
+            getList();
+            for (int i = 0;i<10;i++) {
+                list.add(i+"");
+                System.out.println(list);
+            }
+            response.setResult(list);
+        }catch (RuntimeException e) {
+            response.setErrorMessage(e.getMessage());
+        }catch (Exception e){
+            response.setErrorMessage(e.getMessage());
+        }
+        return response;
+    }
 
+    private List<String> getList(){
+        list = new ArrayList<>();
+        return list;
     }
 
 }
