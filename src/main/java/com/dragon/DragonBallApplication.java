@@ -9,6 +9,8 @@ import tk.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication
 @EnableTransactionManagement
+//@EnableEurekaClient
+//@EnableDiscoveryClient
 @MapperScan(basePackages = "com.dragon.dao.mapper")
 public class DragonBallApplication extends SpringBootServletInitializer {
 
