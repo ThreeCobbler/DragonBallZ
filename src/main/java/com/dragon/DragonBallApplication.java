@@ -8,7 +8,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import tk.mybatis.spring.annotation.MapperScan;
 
-//@EnableDiscoveryClient
+//@EnableDiscoveryClient   等价于 @EnableEurekaClient  但是前者还可以用于其他的服务发现工具 如：zooKeeper
 @SpringBootApplication
 @EnableTransactionManagement
 @EnableEurekaClient
