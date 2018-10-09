@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: base-service
   datasource :
     url : jdbc:mysql://192.168.71.35:3306/test
     username : root
@@ -16,8 +18,19 @@ spring:
 
 logging.level.com.dragon.dao.mapper : DEBUG
 mybatis.mapper-locations : classpath:mappers/*.xml
-
 server.port : 8082
+
+
+eureka:
+# 显示ip地址  不写就显示主机名称
+  instance:
+    prefer-ip-address : true
+  client:
+    serverUrl:
+      defaultZone : http://localhost:1111/eureka
+
+
+
 
 
 
