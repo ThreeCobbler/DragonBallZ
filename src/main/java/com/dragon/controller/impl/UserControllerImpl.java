@@ -36,6 +36,7 @@ public class UserControllerImpl implements IUserController {
      * 注册
      * @param user
      * @return
+     * 等价于 PostMapping
      */
     @RequestMapping(value = "add",method = RequestMethod.POST)
     public BaseResponse add(@RequestBody UserEO user){
@@ -63,6 +64,7 @@ public class UserControllerImpl implements IUserController {
      * 查找
      * @param id
      * @return
+     * 等价于 GetMapping
      */
     @RequestMapping(value = "findById",method = RequestMethod.GET)
     public BaseResponse findById(@RequestParam Long id){
