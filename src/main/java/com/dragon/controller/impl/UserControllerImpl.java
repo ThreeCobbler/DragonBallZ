@@ -142,6 +142,12 @@ public class UserControllerImpl implements IUserController {
                                     @RequestParam(value = "endTime",required = false) String endTime) {
         BaseResponse response = new BaseResponse();
         try{
+            if (page == null) {
+                page = 1;
+            }
+            if (size == null) {
+                size = 20;
+            }
             List<UserEO> userList = userService.getUserList(page, size,startTime,endTime);
             PageInfo pages = new PageInfo(userList);
             response.setData(userList);

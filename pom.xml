@@ -241,6 +241,12 @@
 			<!--<version>5.0.3.RELEASE</version>-->
 		<!--</dependency>-->
 
+		<!-- spring boot： 此版本使用的amqp-client的4.x版本，所有需要注释掉上面的amqp-client配置  -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+		</dependency>
+
 
 	</dependencies>
 

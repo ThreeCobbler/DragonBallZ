@@ -1,4 +1,11 @@
 spring:
+# 配置rabbitMQspring:
+  rabbitmq:
+    host: 192.168.71.36
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: spring-boot-vhost
   application:
     name: dragonBall
   datasource :
