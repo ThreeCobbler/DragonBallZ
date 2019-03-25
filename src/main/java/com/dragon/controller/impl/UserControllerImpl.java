@@ -1,5 +1,6 @@
 package com.dragon.controller.impl;
 
+import com.dragon.common.context.CurrentUser;
 import com.dragon.common.dto.BaseResponse;
 import com.dragon.common.utils.CookieUtils;
 import com.dragon.controller.IUserController;
@@ -220,9 +221,18 @@ public class UserControllerImpl implements IUserController {
             String token = CookieUtils.getCookieValue(request, TOKEN_KEY);
             CookieUtils.deleteCookie(request,httpServletResponse,TOKEN_KEY);
             userRedis.delete(token);
+            CurrentUser.clear();
         }catch (Exception e) {
             response.setErrorMessage(e.getMessage());
         }
+        return response;
+    }
+
+    @GetMapping(value="getUser")
+    public BaseResponse getUser() {
+        BaseResponse response = new BaseResponse();
+        UserEO user = CurrentUser.getUser();
+        response.setResult(user);
         return response;
     }
 

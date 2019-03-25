@@ -1,6 +1,7 @@
 package com.dragon.interceptor;
 
 import com.alibaba.fastjson.JSON;
+import com.dragon.common.context.CurrentUser;
 import com.dragon.common.dto.BaseResponse;
 import com.dragon.common.utils.CookieUtils;
 import com.dragon.dao.entity.UserEO;
@@ -35,22 +36,26 @@ public class MyInterceptor1 implements HandlerInterceptor {
         String requestURI = request.getRequestURI();
         for (String url : ignoreList ) {
             if(url.equals(requestURI)) {
+                CurrentUser.clear();
                 return true;
             }
         }
         String cookieValue = CookieUtils.getCookieValue(request, TOKEN_KEY);
         UserEO userEO = userRedis.getUserEO(cookieValue);
         if (userEO == null) {
+            CurrentUser.clear();
 //            response.sendRedirect("登录地址?url="+request.getRequestURL());
             BaseResponse baseResponse = new BaseResponse();
             baseResponse.setErrorMessage("请重新登陆");
             response.setHeader("Content-type","text/html; charset=UTF-8");
-            OutputStream out = response.getOutputStream();
-            out.write(JSON.toJSONString(baseResponse).getBytes("utf-8"));
-            out.flush();
-            out.close();
+            OutputStream os = response.getOutputStream();
+//            OutputStreamWriter osw = new OutputStreamWriter(out);
+//            osw.write(JSON.toJSONString(baseResponse));
+            os.write(JSON.toJSONString(baseResponse).getBytes("utf-8"));
+            os.close();
             return false;
         }
+        CurrentUser.setUser(userEO);
         // 只有返回true才会继续向下执行，返回false取消当前请求
         request.setAttribute("user",userEO);
         return true;
