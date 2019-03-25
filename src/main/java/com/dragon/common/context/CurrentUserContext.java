@@ -5,8 +5,9 @@ import com.dragon.dao.entity.UserEO;
 /**
  * @author ljn
  * @date 2019/3/25.
+ * 当前登录用户副本
  */
-public class CurrentUser {
+public class CurrentUserContext {
 
     private static ThreadLocal<UserEO> userThread = new ThreadLocal<UserEO>();
 
