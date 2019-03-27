@@ -3,6 +3,7 @@ package com.dragon.controller.impl;
 import com.dragon.common.context.CurrentUserContext;
 import com.dragon.common.dto.BaseResponse;
 import com.dragon.common.utils.CookieUtils;
+import com.dragon.common.utils.RequestRealIp;
 import com.dragon.controller.IUserController;
 import com.dragon.dao.entity.UserEO;
 import com.dragon.service.IUserRedis;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 
 /**
@@ -229,9 +232,15 @@ public class UserControllerImpl implements IUserController {
     }
 
     @GetMapping(value="getUser")
-    public BaseResponse getUser() {
+    public BaseResponse getUser(HttpServletRequest request) throws UnknownHostException {
         BaseResponse response = new BaseResponse();
         UserEO user = CurrentUserContext.getUser();
+        //获取本机ip
+        InetAddress ia = InetAddress.getLocalHost();
+        String localIp =  ia.getHostAddress();
+        System.out.println(localIp);
+        String requestIp = RequestRealIp.getRequestRealIp(request);
+        System.out.println(requestIp);
         response.setResult(user);
         return response;
     }
