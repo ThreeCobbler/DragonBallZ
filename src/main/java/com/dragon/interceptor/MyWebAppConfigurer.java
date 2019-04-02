@@ -1,9 +1,11 @@
 package com.dragon.interceptor;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,10 +14,16 @@ import java.util.List;
  * Created by 339939 on 2018/3/26.
  */
 @Configuration
-public class MyWebAppConfigurer extends WebMvcConfigurerAdapter {
+public class MyWebAppConfigurer implements WebMvcConfigurer {
 
-//    @Autowired
-//    private MyInterceptor1 myInterceptor1;
+    @Autowired
+    private MyInterceptor2 myInterceptor2;
+
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+
+    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -23,9 +31,8 @@ public class MyWebAppConfigurer extends WebMvcConfigurerAdapter {
         // addPathPatterns 用于添加拦截规则
         // excludePathPatterns 用户排除拦截
         this.addIgnoreList();
-        registry.addInterceptor(myInterceptor1()).addPathPatterns("/**");
-//        registry.addInterceptor(new MyInterceptor2()).addPathPatterns("/**");
-        super.addInterceptors(registry);
+        registry.addInterceptor(myInterceptor1()).addPathPatterns("/**").excludePathPatterns("/login", "/register");
+      registry.addInterceptor(myInterceptor2).addPathPatterns("/**");
     }
 
     @Bean

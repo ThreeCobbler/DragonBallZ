@@ -7,6 +7,7 @@ import com.dragon.service.IOrderRedis;
 import com.dragon.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -23,6 +24,7 @@ public class OrderServiceImpl implements IOrderService{
     private IOrderRedis orderRedis;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public OrderEO createOrder(Double orderAmount) {
         String orderNo = orderRedis.getOrderNo();
         OrderEO order = new OrderEO();

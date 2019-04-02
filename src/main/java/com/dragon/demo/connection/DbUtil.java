@@ -18,23 +18,29 @@ public class DbUtil {
 
     private static final String password = "root";
 
-    private static Connection conn = null;
+    /**
+     * 可以使用ThreadLocal为每个线程创建一个数据库连接
+     * 这样就不会产生并发的问题
+     */
+    private static ThreadLocal<Connection> localConn = new ThreadLocal<Connection>();
 
     /**
      * 加锁防止线程1关闭线程2的连接
      * @return
      */
-    public static synchronized Connection getConnection() {
+    public static Connection getConnection() {
         try{
             Class.forName(driver);
-            conn = DriverManager.getConnection(url, username, password);
+            Connection conn = DriverManager.getConnection(url, username, password);
+            localConn.set(conn);
         }catch (Exception e) {
             e.printStackTrace();
         }
-        return conn;
+        return localConn.get();
     }
 
-    public static synchronized void closeConnection() {
+    public static void closeConnection() {
+        Connection conn = localConn.get();
         if (conn != null) {
             try {
                 conn.close();

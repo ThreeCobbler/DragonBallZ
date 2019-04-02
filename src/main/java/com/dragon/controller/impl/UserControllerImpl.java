@@ -126,7 +126,7 @@ public class UserControllerImpl implements IUserController {
      * @param userName
      * @return
      */
-    @RequestMapping(value = "checkUser",method = RequestMethod.GET)
+    @RequestMapping(value = "checkuser",method = RequestMethod.GET)
     public BaseResponse checkUser(@RequestParam(value = "userAccount",required = false) String userAccount,
                                   @RequestParam(value = "userName",required = false) String userName){
         BaseResponse response = new BaseResponse();
