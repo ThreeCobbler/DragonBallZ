@@ -3,6 +3,7 @@ package com.dragon;
 import com.dragon.dao.entity.UserEO;
 import com.dragon.demo.annotation.AliYunField;
 import com.dragon.demo.annotation.GoodsEO;
+import com.dragon.message.weChat.WeChatMessageManager;
 import com.dragon.service.IOrderRedis;
 import com.dragon.service.IUserService;
 import org.junit.Test;
@@ -93,6 +94,19 @@ public class DragonBallApplicationTests {
 //		});
 
 
+	}
+
+	@Autowired
+	private WeChatMessageManager weChatMessageManager;
+
+	@Test
+	public void test232() {
+		String token = weChatMessageManager.getToken();
+	}
+
+	@Test
+	public void test2d32() {
+		weChatMessageManager.sendMessage("你的妖力已达受态，即将飞升色欲天，请做好准备。\\n注意<a href=\\\"http://work.weixin.qq.com\\\">此次飞升能呆一天</a>，飞升期间不能使用法力。");
 	}
 
 }
