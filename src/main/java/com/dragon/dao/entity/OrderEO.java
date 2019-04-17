@@ -5,6 +5,8 @@ import java.util.Date;
 
 @Table(name = "t_order")
 public class OrderEO {
+
+
     /**
      * 主键
      */
