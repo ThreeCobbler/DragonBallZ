@@ -3,9 +3,13 @@ package com.dragon;
 import com.dragon.dao.entity.UserEO;
 import com.dragon.demo.annotation.AliYunField;
 import com.dragon.demo.annotation.GoodsEO;
+import com.dragon.email.IMailService;
+import com.dragon.email.dto.Message;
 import com.dragon.message.weChat.WeChatMessageManager;
 import com.dragon.service.IOrderRedis;
 import com.dragon.service.IUserService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -78,20 +85,20 @@ public class DragonBallApplicationTests {
 
 	@Test
 	public void test30(){
-//		@Data
-//		@AllArgsConstructor
-//		class A{
-//			String id;
-//			String name;
-//		}
-//		List<A> list = new ArrayList<A>();
-//		for (int i = 0;i < 5;i++) {
-//			list.add(new A("id"+i,"name"+i));
-//		}
-//		list.forEach(System.out::println);
-//		list.stream().collect(Collectors.toMap(A::getId,A::getName)).forEach((k, v)->{
-//			System.out.println(k+"/"+v);
-//		});
+		@Data
+		@AllArgsConstructor
+		class A{
+			String id;
+			String name;
+		}
+		List<A> list = new ArrayList<A>();
+		for (int i = 0;i < 5;i++) {
+			list.add(new A("id"+i,"name"+i));
+		}
+		list.forEach(System.out::println);
+		list.stream().collect(Collectors.toMap(A::getId,A::getName)).forEach((k, v)->{
+			System.out.println(k+"/"+v);
+		});
 
 
 	}
@@ -107,6 +114,18 @@ public class DragonBallApplicationTests {
 	@Test
 	public void test2d32() {
 		weChatMessageManager.sendMessage("你的妖力已达受态，即将飞升色欲天，请做好准备。\\n注意<a href=\\\"http://work.weixin.qq.com\\\">此次飞升能呆一天</a>，飞升期间不能使用法力。");
+	}
+
+	@Autowired
+	private IMailService mailService;
+
+	@Test
+	public void sendMail() {
+		Message message = new Message();
+		message.setMessageCode("MissingParameter");
+		message.setMessageStatus("Failed");
+		message.setCause("缺少参数,请确认");
+		mailService.sendMessageMail(message, "测试消息通知", "message.ftl");
 	}
 
 }

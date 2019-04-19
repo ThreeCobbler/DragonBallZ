@@ -22,6 +22,14 @@ spring:
   redis.pool.max-idle : 8
   redis.pool.min-idle : 0
   redis.pool.timeout : 10000
+#  邮箱配置
+  mail:
+    port: 25
+    username: lp103021@163.com
+    password: ljn103021zxc
+    protocol: smtp
+    default-encoding: utf-8
+    host: smtp.163.com
 
 logging.level.com.dragon.dao.mapper : DEBUG
 mybatis.mapper-locations : classpath:mappers/*.xml
@@ -32,7 +40,6 @@ sendWeChatMessageUrl: https://qyapi.weixin.qq.com/cgi-bin/message/send
 corpid: wwb39358a1127198d6
 corpsecret: iZ5ZcrdEmVURIWUjOcFFZE7uxjPyuP90MvCO1aGyiMM
 agentid: 1000002
-
 
 
 #eureka:
