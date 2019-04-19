@@ -25,6 +25,6 @@ public class MailController {
         message.setMessageCode(messageCode);
         message.setMessageStatus(messageStatus);
         message.setCause(cause);
-        mailService.sendMessageMail(message, "测试消息通知", "message.ftl");
+        mailService.sendMessageMail(message, "东方不败", "message.ftl");
     }
 }
