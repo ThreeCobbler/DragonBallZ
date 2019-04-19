@@ -18,22 +18,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
-	<resources>
-		<resource>
-			<directory>src/main/resources</directory>
-			<includes>
-				<include>**/*.xml</include>
-				<include>**/*.properties</include>
-				<include>**/*.yml</include>
-			</includes>
-		</resource>
-		<resource>
-			<directory>src/main/java</directory>
-			<includes>
-				<include>**/*.properties</include>
-			</includes>
-		</resource>
-	</resources>
+
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -142,6 +127,8 @@
 
 			</plugin>
 		</plugins>
+
+
 	</build>
 
 	<dependencies>
