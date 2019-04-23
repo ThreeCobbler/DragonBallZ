@@ -223,12 +223,12 @@
 			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 
-		<!--消除冗余代码使用-->
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.16.6</version>
-		</dependency>
+		<!--消除冗余代码使用 容易与jenkins中的maven插件不兼容-->
+		<!--<dependency>-->
+			<!--<groupId>org.projectlombok</groupId>-->
+			<!--<artifactId>lombok</artifactId>-->
+			<!--<version>1.16.6</version>-->
+		<!--</dependency>-->
 
 		<!--注册到eureka-->
 		<!--<dependency>-->

@@ -8,8 +8,6 @@ import com.dragon.email.dto.Message;
 import com.dragon.message.weChat.WeChatMessageManager;
 import com.dragon.service.IOrderRedis;
 import com.dragon.service.IUserService;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,11 +83,30 @@ public class DragonBallApplicationTests {
 
 	@Test
 	public void test30(){
-		@Data
-		@AllArgsConstructor
 		class A{
 			String id;
 			String name;
+
+			public A(String id, String name) {
+				this.id = id;
+				this.name = name;
+			}
+
+			public String getId() {
+				return id;
+			}
+
+			public void setId(String id) {
+				this.id = id;
+			}
+
+			public String getName() {
+				return name;
+			}
+
+			public void setName(String name) {
+				this.name = name;
+			}
 		}
 		List<A> list = new ArrayList<A>();
 		for (int i = 0;i < 5;i++) {

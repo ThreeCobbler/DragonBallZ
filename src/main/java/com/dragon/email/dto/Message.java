@@ -1,12 +1,9 @@
 package com.dragon.email.dto;
 
-import lombok.Data;
-
 /**
  * @author ljn
  * @date 2019/4/19.
  */
-@Data
 public class Message {
 
     private String messageCode;
@@ -14,4 +11,28 @@ public class Message {
     private String messageStatus;
 
     private String cause;
+
+    public String getMessageCode() {
+        return messageCode;
+    }
+
+    public void setMessageCode(String messageCode) {
+        this.messageCode = messageCode;
+    }
+
+    public String getMessageStatus() {
+        return messageStatus;
+    }
+
+    public void setMessageStatus(String messageStatus) {
+        this.messageStatus = messageStatus;
+    }
+
+    public String getCause() {
+        return cause;
+    }
+
+    public void setCause(String cause) {
+        this.cause = cause;
+    }
 }
