@@ -223,6 +223,7 @@
 			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 
+		<!--消除冗余代码使用-->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -260,12 +261,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
-		<!--消除冗余代码使用-->
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
-		</dependency>
+
 
 
 	</dependencies>
