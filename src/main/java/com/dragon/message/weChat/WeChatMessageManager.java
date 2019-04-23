@@ -50,7 +50,7 @@ public class WeChatMessageManager {
     public void sendMessage(String content) {
         String token = this.getToken();
         sendMessageUrl += "?access_token=" + token;
-        SendMsgDTO text = new SendMsgDTO();
+        SendMsgDto text = new SendMsgDto();
         text.setContent(content);
         Map<String, Object> map = new HashMap<>();
         map.put("touser", "@all");

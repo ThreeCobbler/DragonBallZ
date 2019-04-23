@@ -4,7 +4,7 @@ package com.dragon.message.weChat;
  * @author ljn
  * @date 2019/4/3.
  */
-public class SendMsgDTO {
+public class SendMsgDto {
 
     private String content;
 
