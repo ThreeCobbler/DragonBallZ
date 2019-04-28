@@ -20,14 +20,16 @@ public class ListTest {
         Map<String,Object> map = new HashMap<>();
         map.containsKey("s");
         Set<String> strings = map.keySet();
-        map.values();
+        Object[] objects = map.values().toArray();
         List list3 = new ArrayList<>(map.values());
+        list3.isEmpty();
         Map<String,Object> treemap = new TreeMap<>(map);
         String s = "s  tr in  g";
         System.out.println(s.length());
         String s1 = s.replaceAll("  ", " ");
         System.out.println(s1);
         System.out.println(s1.length());
+
     }
 
     public String getA() {

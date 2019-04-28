@@ -1,5 +1,6 @@
 package com.dragon;
 
+import com.dragon.dao.entity.OrderEO;
 import com.dragon.dao.entity.UserEO;
 import com.dragon.demo.annotation.AliYunField;
 import com.dragon.demo.annotation.GoodsEO;
@@ -7,6 +8,7 @@ import com.dragon.email.IMailService;
 import com.dragon.email.dto.Message;
 import com.dragon.message.weChat.WeChatMessageManager;
 import com.dragon.service.IOrderRedis;
+import com.dragon.service.IUserRedis;
 import com.dragon.service.IUserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +22,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
@@ -31,6 +34,9 @@ public class DragonBallApplicationTests {
 
 	@Autowired
 	private IOrderRedis orderRedis;
+
+	@Autowired
+	IUserRedis userRedis;
 
 	@Test
 	public void contextLoads() {
@@ -55,7 +61,18 @@ public class DragonBallApplicationTests {
 	}
 
 	public static void main(String[] args) {
-
+		ArrayList list = new ArrayList<>(10);
+		System.out.println(list.size());
+		for (int i=0;i<10;i++) {
+			list.add(i);
+		}
+		System.out.println(list);
+		list.add(1);
+		list.add(null);
+		list.trimToSize();
+		boolean result = list.contains(1);
+		int i = list.indexOf(1);
+		System.out.println(list);
 	}
 
 	@Test
@@ -144,5 +161,72 @@ public class DragonBallApplicationTests {
 		message.setCause("缺少参数,请确认");
 		mailService.sendMessageMail(message, "测试消息通知", "message.ftl");
 	}
+
+	@Test
+	public void testRedis1(){
+		for (int i=0;i<10;i++) {
+			userRedis.pushOrderId("SH00"+i);
+		}
+	}
+
+	@Test
+	public void testRedis2(){
+		userRedis.pushOrder("SH001");
+	}
+
+	@Test
+	public void testRedis3(){
+		String orderId = userRedis.getLastOrderId();
+		System.out.println(orderId);
+	}
+
+	@Test
+	public void testRedis4(){
+		for (int i=0;i<10;i++) {
+			userRedis.saveOrderIdBySet("SH111");
+		}
+		for (int i=0;i<10;i++) {
+			userRedis.saveOrderIdBySet("SH110");
+		}
+	}
+
+	@Test
+	public void testRedis5(){
+		String orderId = userRedis.getOrderIdBySet();
+	}
+
+	@Test
+	public void testRedis6(){
+		Set<String> orderSet = userRedis.getOrderSet();
+		System.out.println(orderSet);
+	}
+
+	@Test
+	public void testRedis7(){
+		userRedis.setHashOrderId("SG005");
+	}
+
+
+	@Test
+	public void testRedis8(){
+		String order = userRedis.getHashOrderId();
+		System.out.println(order);
+	}
+
+	@Test
+	public void testRedis9(){
+		OrderEO order = new OrderEO();
+		order.setOrderNo("SG009");
+		order.setOrderAmount(100.0);
+		userRedis.saveOrderIdForZSet(order, 6);
+	}
+
+	@Test
+	public void testRedis10(){
+		List list = userRedis.getOrderIdForZSet();
+		System.out.println(list);
+	}
+
+
 
 }

@@ -2,6 +2,7 @@ package com.dragon.message.weChat;
 
 import com.dragon.common.redis.AbstractRedis;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -18,11 +19,14 @@ public class WeChatTokenRedis extends AbstractRedis{
 
 
     @Autowired
-    private StringRedisTemplate redisTemplate;
+    private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Override
     protected StringRedisTemplate getTemplate() {
-        return redisTemplate;
+        return stringRedisTemplate;
     }
 
     public void saveToken(String token) {

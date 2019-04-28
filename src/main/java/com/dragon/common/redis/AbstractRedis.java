@@ -17,6 +17,8 @@ public abstract class AbstractRedis {
 
     protected ListOperations<String,String> listOperations;
 
+    protected HashOperations<String, String, String> hashOperations;
+
     public AbstractRedis() {
     }
 
@@ -26,6 +28,7 @@ public abstract class AbstractRedis {
         this.setOperations = getTemplate().opsForSet();
         this.zSetOperations = getTemplate().opsForZSet();
         this.listOperations = getTemplate().opsForList();
+        this.hashOperations = getTemplate().opsForHash();
     }
 
     /**
