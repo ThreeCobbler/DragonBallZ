@@ -34,6 +34,7 @@ spring:
 logging.level.com.dragon.dao.mapper : DEBUG
 mybatis.mapper-locations : classpath:mappers/*.xml
 server.port : 8082
+server.servlet.context-path: /dragonBall
 
 getWeChatTokenUrl: https://qyapi.weixin.qq.com/cgi-bin/gettoken
 sendWeChatMessageUrl: https://qyapi.weixin.qq.com/cgi-bin/message/send

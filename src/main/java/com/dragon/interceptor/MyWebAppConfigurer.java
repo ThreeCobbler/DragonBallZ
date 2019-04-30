@@ -32,7 +32,7 @@ public class MyWebAppConfigurer implements WebMvcConfigurer {
         // excludePathPatterns 用户排除拦截
         this.addIgnoreList();
         registry.addInterceptor(myInterceptor1()).addPathPatterns("/**").excludePathPatterns("/login", "/register");
-      registry.addInterceptor(myInterceptor2).addPathPatterns("/**");
+//      registry.addInterceptor(myInterceptor2).addPathPatterns("/**");
     }
 
     @Bean
@@ -42,13 +42,13 @@ public class MyWebAppConfigurer implements WebMvcConfigurer {
 
     private void addIgnoreList() {
         List<String> list = Arrays.asList(
-                "/user/add",
-                "/user/login",
-                "/user/checkUser",
-                "/ziliao.txt",
-                "/demo/test2",
-                "/user/findById",
-                "/user/getUserList"
+                "/dragonBall/user/add",
+                "/dragonBall/user/login",
+                "/dragonBall/user/checkUser",
+                "/dragonBall/ziliao.txt",
+                "/dragonBall/demo/test2",
+                "/dragonBall/user/findById",
+                "/dragonBall/user/getUserList"
         );
         this.myInterceptor1().setIgnoreList(list);
     }
