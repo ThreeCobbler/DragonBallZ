@@ -1,5 +1,6 @@
 package com.dragon.demo;
 
+import com.dragon.common.context.CurrentUserContext;
 import com.dragon.common.enums.EnumSingleton;
 import com.dragon.dao.entity.UserEO;
 
@@ -16,7 +17,8 @@ public class Test {
         UserEO eo = new UserEO();
         System.out.println(eo.toString());
 
-
+        UserEO user = CurrentUserContext.getUser();
+        System.out.println(user);
 
 
     }
