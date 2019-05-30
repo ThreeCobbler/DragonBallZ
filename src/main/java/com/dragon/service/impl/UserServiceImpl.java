@@ -138,7 +138,7 @@ public class UserServiceImpl implements IUserService {
         if (!str.equals(userEO.getUserPassword())) {
             throw new RuntimeException("用户名或密码不正确");
         }
-        String token =  UUID.randomUUID().toString();
+        String token =  UUID.randomUUID().toString().replace("-", "");
         userEO.setUserPassword(null);
         userRedis.addToken(token,userEO);
         return token;
