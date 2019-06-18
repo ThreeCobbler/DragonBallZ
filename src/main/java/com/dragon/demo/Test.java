@@ -19,6 +19,22 @@ public class Test {
 
         UserEO user = CurrentUserContext.getUser();
         System.out.println(user);
+        try {
+            Class.forName("");
+            System.out.println("1");
+            System.out.println("2");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        System.out.println(classLoader);
+        System.out.println(classLoader.getParent());
+        System.out.println(classLoader.getParent().getParent());
+        System.out.println(classLoader.getClass());
+
+
 
 
     }

@@ -30,6 +30,13 @@ public class ListTest {
         System.out.println(s1);
         System.out.println(s1.length());
 
+        Collections.sort(list, new Comparator<Role>() {
+            @Override
+            public int compare(Role o1, Role o2) {
+                return 0;
+            }
+        });
+
     }
 
     public String getA() {
