@@ -227,6 +227,20 @@ public class DragonBallApplicationTests {
 		System.out.println(list);
 	}
 
+	@Test
+	public void testw3() {
+		int i = 0;
+		System.out.println(i++);
+		System.out.println(i);
+		System.out.println(++i);
+		System.out.println(i);
+	}
+
+	@Test
+	public void test233e2(){
+		userRedis.setValue("testkey", "testValue");
+	}
+
 
 
 }

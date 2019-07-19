@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import redis.clients.jedis.Jedis;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -188,4 +189,27 @@ public class UserRedisImpl extends AbstractRedis implements IUserRedis {
 
 //        System.out.println(1 & 5);
     }
+
+    /**
+     * 存储数据到缓存中，并制定过期时间和当Key存在时是否覆盖。
+     *
+     * @param key
+     * @param value
+     * @param nxxx
+     *            nxxx的值只能取NX或者XX，如果取NX，则只有当key不存在是才进行set，如果取XX，则只有当key已经存在时才进行set
+     *
+     * @param expx expx的值只能取EX或者PX，代表数据过期时间的单位，EX代表秒，PX代表毫秒。
+     * @param time 过期时间，单位是expx所代表的单位。
+     * @return
+     */
+    @Override
+    public void setValue(String key, String value) {
+        Jedis jedis=new Jedis("120.78.170.24", 6379);
+        jedis.auth("103021");
+        String set = jedis.set(key, value, "NX", "EX", 20);
+        System.out.println(set);
+        //设置过期时间可以直接使用这个方法，避免过期时间失效
+        redisTemplate.opsForValue().set("1111", "2222", 20, TimeUnit.SECONDS);
+    }
+
 }

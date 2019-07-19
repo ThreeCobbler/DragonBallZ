@@ -42,4 +42,6 @@ public interface IUserRedis {
     void saveOrderIdForZSet(OrderEO order, long score);
 
     List getOrderIdForZSet();
+
+    void setValue(String key, String value);
 }
